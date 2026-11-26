@@ -52,6 +52,21 @@ test("override replaces an existing key, preserves the base and real format plac
   assert.deepEqual(applied, manifest.languages.map(({ path }) => path));
 });
 
+test("Save means saving form changes while SavingThrow keeps the base terminology", async () => {
+  const env = environment();
+  Object.assign(env.game.i18n.translations.PF1, {
+    Save: "Испытание",
+    SavingThrow: "Испытание",
+    SavingThrowPlural: "Испытания",
+    SavingThrowFort: "Стойкость"
+  });
+  await applyTranslations(env);
+  assert.equal(env.game.i18n.translations.PF1.Save, "Сохранить");
+  assert.equal(env.game.i18n.translations.PF1.SavingThrow, "Испытание");
+  assert.equal(env.game.i18n.translations.PF1.SavingThrowPlural, "Испытания");
+  assert.equal(env.game.i18n.translations.PF1.SavingThrowFort, "Стойкость");
+});
+
 test("Foundry package paths never repeat the module directory", async () => {
   for (const leadingSlash of ["", "/"]) {
     const env = environment();

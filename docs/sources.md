@@ -1,6 +1,6 @@
 # Изученные источники
 
-Проверено 26 ноября 2026 года. Исходники зависимостей изучались отдельно; их переводы не переносились в проект. В fixture сохранены только девять используемых английских строк.
+Проверено 26 ноября 2026 года. Исходники зависимостей изучались отдельно; их переводы не переносились в проект. В fixture сохранены только десять используемых английских строк.
 
 | Источник | Что подтверждено |
 | --- | --- |
@@ -14,7 +14,8 @@
 | [Phenomen v13: манифест](https://github.com/phenomen/foundry-vtt-ru/blob/e852da0227652286fc8b8b6763f4edf55cce3f90/public/module.json) | ID `ru-ru`, язык `ru`, версия 13.351.54, `coreTranslation`, адрес `release-v13` |
 | [Phenomen v13: инициализация](https://github.com/phenomen/foundry-vtt-ru/blob/e852da0227652286fc8b8b6763f4edf55cce3f90/src/index.js) | Языковые файлы подключены манифестом; PF1-скрипта с поздним изменением словаря в изученной ветке нет |
 | [PF1 11.11: манифест](https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/blob/v11.11/public/system.json) | ID `pf1`, версия 11.11, совместимость с Foundry 13 |
-| [PF1 11.11: английский словарь](https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/blob/v11.11/lang/en.json) | Восемь реальных ключей и `{save}` |
+| [PF1 11.11: английский словарь](https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/blob/v11.11/lang/en.json) | Девять реальных ключей, включая `PF1.Save`, и `{save}` |
+| [Аудит PF1.Save в PF1 11.11](pf1-save-audit.md) | Шесть употреблений ключа — кнопки сохранения форм; игровых испытаний среди них нет; `PF1.SavingThrow` остаётся в базовом переводе |
 | [PF1 11.11: pf1.mjs](https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/blob/v11.11/pf1.mjs) | Однократная локализация `pf1.config` в обработчике `i18nInit` |
 | [Babele: актуальная документация](https://gitlab.com/riccisi/foundryvtt-babele/-/wikis/Docs) | Каталог переводов, `entries`, регистрация источников, частичные переводы |
 | [Babele 2.9.1: манифест](https://gitlab.com/riccisi/foundryvtt-babele/-/blob/2.9.1/module/module.json) | ID `babele`, `minimum: 13`, `verified: 14`, обязательная зависимость `lib-wrapper`; допускает Foundry 13 |

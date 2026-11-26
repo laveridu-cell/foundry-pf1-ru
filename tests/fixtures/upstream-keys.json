@@ -10,7 +10,8 @@
       "PF1.AbilityWis": "Wisdom",
       "PF1.AbilityCha": "Charisma",
       "PF1.SavingThrowRoll": "{save} Saving Throw",
-      "PF1.ArmorClass": "Armor Class"
+      "PF1.ArmorClass": "Armor Class",
+      "PF1.Save": "Save"
     }
   },
   "babele": {
