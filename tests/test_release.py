@@ -96,6 +96,32 @@ class ReleaseTests(unittest.TestCase):
                 path.write_text(json.dumps(data))
                 self.run_tool("validate.py", "--tag", f"v{self.version}", success=False)
 
+    def test_glossary_policy_source_needs_explicit_approval(self):
+        path = self.root / "terminology/glossary.json"
+        glossary = json.loads(path.read_text())
+        term = next(term for term in glossary["terms"] if term["source"] == "AGENTS.md")
+        del term["approvedBy"]
+        path.write_text(json.dumps(glossary))
+        self.run_tool("validate.py", success=False)
+
+    def test_mapped_glossary_terms_still_have_to_match_localization(self):
+        path = self.root / "terminology/glossary.json"
+        glossary = json.loads(path.read_text())
+        term = next(term for term in glossary["terms"] if term.get("key") == "PF1.Save")
+        term["ru"] = "Испытание"
+        path.write_text(json.dumps(glossary))
+        self.run_tool("validate.py", success=False)
+
+    def test_core_rulebook_source_with_citation_is_supported(self):
+        path = self.root / "terminology/glossary.json"
+        glossary = json.loads(path.read_text())
+        term = next(term for term in glossary["terms"] if term["source"] == "AGENTS.md")
+        term["source"] = "user-core-rulebook"
+        term["reference"] = "Тестовая библиографическая ссылка и страница; не реальное издание"
+        del term["approvedBy"]
+        path.write_text(json.dumps(glossary))
+        self.run_tool("validate.py")
+
 
 if __name__ == "__main__":
     unittest.main()
