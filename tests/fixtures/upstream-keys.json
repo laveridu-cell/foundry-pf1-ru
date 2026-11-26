@@ -1,0 +1,22 @@
+{
+  "pf1": {
+    "version": "11.11",
+    "source": "https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/blob/v11.11/lang/en.json",
+    "keys": {
+      "PF1.AbilityStr": "Strength",
+      "PF1.AbilityDex": "Dexterity",
+      "PF1.AbilityCon": "Constitution",
+      "PF1.AbilityInt": "Intelligence",
+      "PF1.AbilityWis": "Wisdom",
+      "PF1.AbilityCha": "Charisma",
+      "PF1.SavingThrowRoll": "{save} Saving Throw",
+      "PF1.ArmorClass": "Armor Class",
+      "PF1.Save": "Save"
+    }
+  },
+  "babele": {
+    "version": "2.9.1",
+    "source": "https://gitlab.com/riccisi/foundryvtt-babele/-/blob/2.9.1/module/lang/en.json",
+    "keys": { "BABELE.CompendiumTranslations": "Translation Export" }
+  }
+}

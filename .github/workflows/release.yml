@@ -1,0 +1,68 @@
+name: Подготовка черновика релиза
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Существующий тег версии, например v0.1.0"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: draft-release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', inputs.tag) || github.ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Проверить версию и коммит тега
+        run: |
+          python3 tools/validate.py --tag "$RELEASE_TAG"
+          git show-ref --verify --quiet "refs/tags/$RELEASE_TAG"
+          test "$(git rev-parse HEAD)" = "$(git rev-parse "refs/tags/$RELEASE_TAG^{commit}")"
+      - run: npm run check
+      - run: npm test
+      - run: npm run build
+      - name: Проверить файлы релиза и их версию
+        run: npm run check:release -- --tag "$RELEASE_TAG"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: foundry-pf1-ru-${{ env.RELEASE_TAG }}
+          path: |
+            dist/module.json
+            dist/foundry-pf1-ru.zip
+          if-no-files-found: error
+      - name: Создать только draft (публикация вручную)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$RELEASE_TAG" \
+            --verify-tag --draft --title "$RELEASE_TAG" --generate-notes \
+            dist/module.json dist/foundry-pf1-ru.zip
+      - name: Напомнить о ручной публикации
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<'SUMMARY'
+          Создан только **черновик** GitHub Release с `module.json` и `foundry-pf1-ru.zip`.
+          После проверки файлов владелец отдельно нажимает **Publish release** и назначает стабильный выпуск **Latest**.
+          Пока репозиторий Private, установщик Foundry не может скачать эти файлы без авторизации.
+          SUMMARY

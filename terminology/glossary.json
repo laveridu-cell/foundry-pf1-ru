@@ -1,0 +1,13 @@
+{
+  "source": "https://pathfinder.family/",
+  "entryNameFormat": "Русское название [English Name]",
+  "terms": [
+    { "en": "Strength", "ru": "Сила", "key": "PF1.AbilityStr", "source": "https://pathfinder.family/ability" },
+    { "en": "Dexterity", "ru": "Ловкость", "key": "PF1.AbilityDex", "source": "https://pathfinder.family/ability" },
+    { "en": "Constitution", "ru": "Выносливость", "key": "PF1.AbilityCon", "source": "https://pathfinder.family/ability" },
+    { "en": "Intelligence", "ru": "Интеллект", "key": "PF1.AbilityInt", "source": "https://pathfinder.family/ability" },
+    { "en": "Wisdom", "ru": "Мудрость", "key": "PF1.AbilityWis", "source": "https://pathfinder.family/ability" },
+    { "en": "Charisma", "ru": "Харизма", "key": "PF1.AbilityCha", "source": "https://pathfinder.family/ability" },
+    { "en": "Armor Class", "ru": "Класс брони", "key": "PF1.ArmorClass", "source": "https://pathfinder.family/ability", "note": "Пример исправления регистра слова «брони»." }
+  ]
+}

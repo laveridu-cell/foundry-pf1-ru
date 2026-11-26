@@ -1,0 +1,71 @@
+{
+  "id": "foundry-pf1-ru",
+  "title": "PF1 — Русификатор",
+  "description": "Дополнения и исправления русской локализации Pathfinder 1e поверх перевода Phenomen; постепенный перевод библиотек через Babele.",
+  "version": "0.1.0",
+  "authors": [{ "name": "laveridu-cell" }],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "13"
+  },
+  "relationships": {
+    "systems": [{
+      "id": "pf1",
+      "type": "system",
+      "compatibility": {
+        "minimum": "11.11",
+        "verified": "11.11",
+        "maximum": "11.11"
+      }
+    }],
+    "requires": [
+      {
+        "id": "ru-ru",
+        "type": "module",
+        "manifest": "https://github.com/phenomen/foundry-vtt-ru/releases/download/release-v13/module.json"
+      },
+      {
+        "id": "babele",
+        "type": "module",
+        "manifest": "https://gitlab.com/riccisi/foundryvtt-babele/-/raw/2.9.1/module/module.json",
+        "compatibility": {
+          "minimum": "2.7.3",
+          "verified": "2.9.1",
+          "maximum": "2.9.1"
+        }
+      },
+      {
+        "id": "lib-wrapper",
+        "type": "module",
+        "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json"
+      }
+    ]
+  },
+  "esmodules": ["scripts/module.mjs"],
+  "languages": [
+    {
+      "lang": "ru",
+      "name": "Русский",
+      "system": "pf1",
+      "path": "lang/system/pf1.json"
+    },
+    {
+      "lang": "ru",
+      "name": "Русский",
+      "module": "babele",
+      "path": "lang/modules/babele.json"
+    },
+    {
+      "lang": "ru",
+      "name": "Русский",
+      "system": "pf1",
+      "path": "lang/overrides/phenomen.json"
+    }
+  ],
+  "url": "https://github.com/laveridu-cell/foundry-pf1-ru",
+  "bugs": "https://github.com/laveridu-cell/foundry-pf1-ru/issues",
+  "readme": "README.md",
+  "manifest": "https://github.com/laveridu-cell/foundry-pf1-ru/releases/latest/download/module.json",
+  "download": "https://github.com/laveridu-cell/foundry-pf1-ru/releases/download/v0.1.0/foundry-pf1-ru.zip"
+}
