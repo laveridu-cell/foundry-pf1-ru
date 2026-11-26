@@ -13,7 +13,12 @@ export async function applyTranslations({ game, utils, fetcher = globalThis.fetc
   // Load everything before modifying the dictionary; a failed request keeps the base intact.
   // Promise.all preserves manifest order even when requests finish out of order.
   const dictionaries = await Promise.all(layers.map(async ({ path }) => {
-    const url = utils.getRoute(`modules/${MODULE_ID}/${path}`);
+    // Foundry may already have expanded a manifest path to modules/<id>/...
+    const moduleRoot = `modules/${MODULE_ID}/`;
+    const filePath = path.replace(/^\/+/, "");
+    const resourcePath = filePath.startsWith(moduleRoot) ? filePath : `${moduleRoot}${filePath}`;
+    // Keep routePrefix, but never let fetch resolve against the current page/base URL.
+    const url = `/${utils.getRoute(resourcePath).replace(/^\/+/, "")}`;
     const response = await fetcher(url, { cache: "no-cache" });
     if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
     const data = await response.json();

@@ -1,6 +1,6 @@
 {
   "id": "foundry-pf1-ru",
-  "title": "Pathfinder 1e — дополнения к русскому переводу",
+  "title": "PF1 — Русификатор",
   "description": "Дополнения и исправления русской локализации Pathfinder 1e поверх перевода Phenomen; постепенный перевод библиотек через Babele.",
   "version": "0.1.0",
   "authors": [{ "name": "laveridu-cell" }],
@@ -28,11 +28,11 @@
       {
         "id": "babele",
         "type": "module",
-        "manifest": "https://gitlab.com/riccisi/foundryvtt-babele/-/raw/2.7.3/module/module.json",
+        "manifest": "https://gitlab.com/riccisi/foundryvtt-babele/-/raw/2.9.1/module/module.json",
         "compatibility": {
           "minimum": "2.7.3",
-          "verified": "2.7.3",
-          "maximum": "2.7.9"
+          "verified": "2.9.1",
+          "maximum": "2.9.1"
         }
       },
       {

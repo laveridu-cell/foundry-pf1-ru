@@ -52,6 +52,50 @@ test("override replaces an existing key, preserves the base and real format plac
   assert.deepEqual(applied, manifest.languages.map(({ path }) => path));
 });
 
+test("Foundry package paths never repeat the module directory", async () => {
+  for (const leadingSlash of ["", "/"]) {
+    const env = environment();
+    env.game.modules.get(MODULE_ID).languages = manifest.languages.map((entry) => ({
+      ...entry, path: `${leadingSlash}modules/${MODULE_ID}/${entry.path}`
+    }));
+    const requests = [];
+    const fetchFile = env.fetcher;
+    env.fetcher = async (url) => {
+      assert.ok(!url.includes(`modules/${MODULE_ID}/modules/${MODULE_ID}/`), "module directory must occur only once");
+      requests.push(url);
+      return fetchFile(url);
+    };
+    await applyTranslations(env);
+    assert.deepEqual(requests, manifest.languages.map(({ path }) => `/foundry/modules/${MODULE_ID}/${path}`));
+    assert.equal(env.game.i18n.translations.BABELE.CompendiumTranslations, "Переводы библиотек");
+  }
+});
+
+test("JSON URLs stay rooted with routePrefix regardless of the browser or ES-module base", async () => {
+  for (const routePrefix of ["", "foundry", "games/pf1"]) {
+    for (const routeSlash of ["", "/"]) {
+      const env = environment();
+      const prefix = [routePrefix, "modules", MODULE_ID].filter(Boolean).join("/");
+      env.utils.getRoute = (path) => `${routeSlash}${[routePrefix, path].filter(Boolean).join("/")}`;
+      const requests = [];
+      env.fetcher = async (url) => {
+        requests.push(url);
+        assert.ok(url.startsWith("/") && !url.startsWith("//"), "fetch must receive a site-rooted path");
+        const path = url.slice(`/${prefix}/`.length);
+        for (const base of ["game", `modules/${MODULE_ID}/`, `modules/${MODULE_ID}/scripts/localization.mjs`]) {
+          const resolved = new URL(url, `https://foundry.example/${routePrefix ? `${routePrefix}/` : ""}${base}`);
+          assert.equal(resolved.origin, "https://foundry.example");
+          assert.equal(resolved.pathname, `/${prefix}/${path}`);
+          assert.equal(resolved.pathname.split(`/modules/${MODULE_ID}/`).length - 1, 1);
+        }
+        return { ok: true, json: async () => JSON.parse(await readFile(new URL(path, root))) };
+      };
+      await applyTranslations(env);
+      assert.deepEqual(requests, manifest.languages.map(({ path }) => `/${prefix}/${path}`));
+    }
+  }
+});
+
 test("corrections win over earlier layers even if HTTP requests finish in reverse order", async () => {
   const env = environment();
   env.game.modules.get(MODULE_ID).languages = [manifest.languages[0], manifest.languages[2]];

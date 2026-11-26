@@ -87,6 +87,15 @@ def validate(tag=None):
         local_file(path)
 
     references = read_json(ROOT / "tests/fixtures/upstream-keys.json")
+    babele = next(dep for dep in dependencies if dep["id"] == "babele")
+    compatibility = babele["compatibility"]
+    target_version = references["babele"]["version"]
+    version = lambda value: tuple(int(part) for part in value.split("."))
+    require(version(compatibility["minimum"]) <= version(target_version) <= version(compatibility["maximum"]),
+            f"Манифест блокирует целевую Babele {target_version}")
+    require(compatibility["verified"] == target_version, "Версия Babele не совпадает с проверенным источником")
+    require(babele["manifest"] == f"https://gitlab.com/riccisi/foundryvtt-babele/-/raw/{target_version}/module/module.json",
+            "Манифест зависимости должен соответствовать целевой версии Babele")
     originals = {key: value for ref in references.values() for key, value in ref["keys"].items()}
     languages = manifest["languages"]
     require(languages[-1]["path"] == "lang/overrides/phenomen.json", "Исправления должны идти последними")
