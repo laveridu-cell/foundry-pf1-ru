@@ -1,0 +1,12 @@
+{
+  "name": "foundry-pf1-ru",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "check": "python3 tools/validate.py && node --check scripts/module.mjs && node --check scripts/localization.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "build": "python3 tools/package.py"
+  }
+}

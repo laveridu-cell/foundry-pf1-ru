@@ -1,0 +1,11 @@
+{
+  "PF1": {
+    "AbilityStr": "Сила",
+    "AbilityDex": "Ловкость",
+    "AbilityCon": "Выносливость",
+    "AbilityInt": "Интеллект",
+    "AbilityWis": "Мудрость",
+    "AbilityCha": "Харизма",
+    "SavingThrowRoll": "Испытание {save}"
+  }
+}
