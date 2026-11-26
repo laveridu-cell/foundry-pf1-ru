@@ -62,7 +62,7 @@ def validate(tag=None):
     manifest = read_json(ROOT / "module.json")
     package = read_json(ROOT / "package.json")
     require(manifest["id"] == "foundry-pf1-ru", "Неверный ID модуля")
-    require(re.fullmatch(r"\d+\.\d+\.\d+", manifest["version"]), "Неверная версия")
+    require(re.fullmatch(r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)", manifest["version"]), "Неверная версия")
     require(package["version"] == manifest["version"], "Версии package.json и module.json различаются")
     if tag is not None:
         require(tag == f'v{manifest["version"]}', "Тег должен совпадать с версией module.json")

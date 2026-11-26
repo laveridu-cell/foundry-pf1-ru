@@ -5,6 +5,8 @@
 | Источник | Что подтверждено |
 | --- | --- |
 | [Foundry: Module Development](https://foundryvtt.com/article/module-development/) | Поля манифеста `relationships`, `languages`, `esmodules`, URL обновлений; модульная папка совпадает с ID |
+| [GitHub: Linking to releases](https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases) | Постоянный адрес asset `/releases/latest/download/<name>` и адреса конкретных выпусков |
+| [GitHub: Managing releases](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) | Разделение Save draft/Publish release, pre-release и выбор Latest |
 | [Foundry: Localization](https://foundryvtt.com/article/localization/) | Словарь модулей дополняет и переопределяет базовые строки |
 | [API v13: Localization](https://foundryvtt.com/api/v13/classes/foundry.helpers.Localization.html) | Публичные `translations`, асинхронный `setLanguage`, `localize` и `format` |
 | [API v13: i18nInit](https://foundryvtt.com/api/v13/functions/hookEvents.i18nInit.html) | Событие после загрузки языка, между `init` и `setup` |
@@ -28,4 +30,4 @@
 
 Проверка URL учитывает две формы `languages[].path`: исходную `lang/...` и уже подготовленную `modules/foundry-pf1-ru/lang/...`. Безусловное добавление корня модуля к второй форме дублирует его. Нормализация исключает повтор, `getRoute` сохраняет `routePrefix`, начальный `/` делает запрос независимым от браузерной базы. Регрессионные тесты воспроизводят обе формы и разрешение URL с разными базами; до исправления они падали.
 
-Порядок **внутри модулей** при стандартном объединении `languages` не принят за гарантию. Зависимость обеспечивает наличие Phenomen, а обёртка `setLanguage` задаёт наложение после завершения его штатной загрузки. В публичной документации API нет исходника вызова `setLanguage` из `initialize`: фактический порядок в установленной сборке v13 остаётся пунктом ручной проверки, как и совместимость с другими обёртками. Тесты проекта моделируют этот контракт и не являются запуском ядра Foundry.
+Порядок **внутри модулей** при стандартном объединении `languages` не принят за гарантию. Зависимость обеспечивает наличие Phenomen, а обёртка `setLanguage` задаёт наложение после завершения его штатной загрузки. Пользователь подтвердил работу переопределений 0.1.0 в Foundry 13 / PF1 11.11 / Babele 2.9.1. Расширенная проверка кэша на `i18nInit` и совместимость с другими обёртками перечислены отдельно. Тесты проекта моделируют этот контракт и не являются запуском ядра Foundry.

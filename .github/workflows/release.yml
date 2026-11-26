@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.tag || github.ref }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', inputs.tag) || github.ref }}
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
@@ -43,6 +43,15 @@ jobs:
       - run: npm run check
       - run: npm test
       - run: npm run build
+      - name: Проверить файлы релиза и их версию
+        run: npm run check:release -- --tag "$RELEASE_TAG"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: foundry-pf1-ru-${{ env.RELEASE_TAG }}
+          path: |
+            dist/module.json
+            dist/foundry-pf1-ru.zip
+          if-no-files-found: error
       - name: Создать только draft (публикация вручную)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -50,3 +59,10 @@ jobs:
           gh release create "$RELEASE_TAG" \
             --verify-tag --draft --title "$RELEASE_TAG" --generate-notes \
             dist/module.json dist/foundry-pf1-ru.zip
+      - name: Напомнить о ручной публикации
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<'SUMMARY'
+          Создан только **черновик** GitHub Release с `module.json` и `foundry-pf1-ru.zip`.
+          После проверки файлов владелец отдельно нажимает **Publish release** и назначает стабильный выпуск **Latest**.
+          Пока репозиторий Private, установщик Foundry не может скачать эти файлы без авторизации.
+          SUMMARY
