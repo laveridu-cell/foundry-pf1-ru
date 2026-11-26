@@ -121,9 +121,27 @@ def validate(tag=None):
     glossary = read_json(ROOT / "terminology/glossary.json")
     require(glossary["source"] == "https://pathfinder.family/", "Неверный источник терминологии")
     require(glossary["entryNameFormat"] == "Русское название [English Name]", "Неверный формат названий")
+    seen_terms = set()
     for term in glossary["terms"]:
-        require(term["source"].startswith(glossary["source"]), "Нужна ссылка на источник термина")
-        require(final_translations[term["key"]] == term["ru"], f'Термин расходится с переводом: {term["en"]}')
+        require(all(isinstance(term.get(field), str) and term[field].strip() for field in ["en", "ru", "source"]),
+                "Термину нужны английское имя, русский вариант и источник")
+        identity = (term["en"], term.get("context", ""))
+        require(identity not in seen_terms, f'Повтор термина и контекста: {term["en"]}')
+        seen_terms.add(identity)
+        if term["source"] == "AGENTS.md":
+            require(term.get("approvedBy") == "user", "Правило словаря требует явного утверждения пользователя")
+            local_file("AGENTS.md")
+        elif term["source"] == "user-core-rulebook":
+            require(isinstance(term.get("reference"), str) and term["reference"].strip(),
+                    "Нужна библиографическая ссылка и страница русской книги")
+        elif not term["source"].startswith((glossary["source"], "https://www.pathfinder.family/",
+                                            "https://www.d20pfsrd.com/", "https://d20pfsrd.com/")):
+            require(term.get("approvedBy") == "user" and term["source"].startswith("https://"),
+                    "Иной источник требует ссылки и согласования пользователя")
+        # General game terms need not correspond to an interface localization key.
+        if "key" in term:
+            require(final_translations.get(term["key"]) == term["ru"],
+                    f'Термин расходится с переводом: {term["en"]}')
 
     for directory in ["lang/system", "lang/overrides", "lang/modules", "compendium/ru", "terminology"]:
         require((ROOT / directory).is_dir(), f"Нет каталога {directory}")

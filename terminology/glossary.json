@@ -8,6 +8,10 @@
     { "en": "Intelligence", "ru": "Интеллект", "key": "PF1.AbilityInt", "source": "https://pathfinder.family/ability" },
     { "en": "Wisdom", "ru": "Мудрость", "key": "PF1.AbilityWis", "source": "https://pathfinder.family/ability" },
     { "en": "Charisma", "ru": "Харизма", "key": "PF1.AbilityCha", "source": "https://pathfinder.family/ability" },
-    { "en": "Armor Class", "ru": "Класс брони", "key": "PF1.ArmorClass", "source": "https://pathfinder.family/ability", "note": "Пример исправления регистра слова «брони»." }
+    { "en": "Armor Class", "ru": "Класс брони", "key": "PF1.ArmorClass", "source": "https://pathfinder.family/ability", "note": "Пример исправления регистра слова «брони»." },
+    { "en": "Saving Throw", "ru": "Испытание", "context": "игровое испытание", "source": "AGENTS.md", "approvedBy": "user", "note": "Утверждено пользователем; PF1.SavingThrow остаётся в базовой локализации." },
+    { "en": "Domain", "ru": "Сфера", "context": "классовая особенность жреца", "source": "AGENTS.md", "approvedBy": "user" },
+    { "en": "Domains", "ru": "Сферы", "context": "классовая особенность жреца, множественное число", "source": "AGENTS.md", "approvedBy": "user" },
+    { "en": "Save", "ru": "Сохранить", "key": "PF1.Save", "context": "команда сохранения изменений в интерфейсе", "source": "AGENTS.md", "approvedBy": "user" }
   ]
 }
