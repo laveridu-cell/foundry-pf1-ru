@@ -58,7 +58,12 @@
     "PF1.Domain": "Сфера",
     "PF1.Save": "Сохранить (команда интерфейса)",
     "PF1.SkillRankPlural": "Пункты навыков",
-    "PF1.BGSkillRanks": "Пункты фоновых навыков"
+    "PF1.BGSkillRanks": "Пункты фоновых навыков",
+    "TYPES.Actor.character": "Персонаж игрока",
+    "TYPES.Actor.npc": "Персонаж ведущего",
+    "TYPES.Actor.haunt": "Видение",
+    "TYPES.Actor.trap": "Ловушка",
+    "TYPES.Actor.vehicle": "Транспортное средство"
   },
   "reviews": [
     {"id": "R-01", "keys": ["PF1.AbilityScoreLinks"]},

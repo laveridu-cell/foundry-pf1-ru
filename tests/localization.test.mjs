@@ -85,6 +85,64 @@ test("sheet batch overlays ten English labels and keeps third-party sheet entrie
   assert.equal(original.ThirdPartySheet, "Чужой лист");
 });
 
+test("actor creation types use TYPES.Actor independently of sheet labels and preserve IDs and items", async () => {
+  const env = environment();
+  const fixtures = JSON.parse(await readFile(new URL("tests/fixtures/upstream-keys.json", root)));
+  const labels = Object.fromEntries(Object.entries(fixtures.pf1.keys)
+    .filter(([key]) => key.startsWith("TYPES.Actor."))
+    .map(([key, value]) => [key.slice("TYPES.Actor.".length), value]));
+  env.game.i18n.translations.TYPES = {
+    Actor: { ...labels, basic: "Basic (for modules)", thirdParty: "Third-party actor" },
+    Item: { weapon: "Weapon", container: "Container" }
+  };
+  const dictionary = env.game.i18n.translations.TYPES;
+  const beforeIDs = Object.keys(dictionary.Actor);
+  const beforeItems = structuredClone(dictionary.Item);
+  await applyTranslations(env);
+  assert.equal(env.game.i18n.translations.TYPES, dictionary);
+  assert.deepEqual(Object.keys(dictionary.Actor), beforeIDs);
+  assert.deepEqual(dictionary.Item, beforeItems);
+  assert.equal(dictionary.Actor.basic, "Basic (for modules)");
+  assert.equal(dictionary.Actor.thirdParty, "Third-party actor");
+  assert.deepEqual(Object.fromEntries(Object.keys(labels).map((id) => [id, dictionary.Actor[id]])), {
+    character: "Персонаж игрока", npc: "Персонаж ведущего", haunt: "Видение",
+    trap: "Ловушка", vehicle: "Транспортное средство"
+  });
+  for (const [id, sheet] of Object.entries({ character: "PC", npc: "NPC", haunt: "Haunt", trap: "Trap", vehicle: "Vehicle" })) {
+    assert.equal(dictionary.Actor[id], env.game.i18n.translations.PF1.Sheet[sheet]);
+  }
+});
+
+test("awaited language loading exposes actor type labels before an i18nInit consumer reads them", async () => {
+  const env = environment();
+  let wrappedMethod;
+  installLocalization({ ...env, wrapper: { register: (_id, _target, fn) => { wrappedMethod = fn; } } });
+  const typeLabels = Object.freeze({
+    base: "TYPES.Base", character: "TYPES.Actor.character", npc: "TYPES.Actor.npc",
+    vehicle: "TYPES.Actor.vehicle", haunt: "TYPES.Actor.haunt", trap: "TYPES.Actor.trap"
+  });
+  const systemTypes = Object.freeze(["character", "npc", "vehicle", "haunt", "trap"]);
+  const localize = (key) => key.split(".").reduce((data, part) => data?.[part], env.game.i18n.translations) ?? key;
+  // Contract model: the consumer reads configuration label keys after awaited setLanguage.
+  // This does not execute Foundry's private initialization or infer its cache timing.
+  await wrappedMethod(async () => {
+    await Promise.resolve();
+    env.game.i18n.translations.TYPES = { Base: "Base", Actor: {
+      character: "Player Character (PC)", npc: "Nonplayer Character (NPC)",
+      haunt: "Haunt", trap: "Trap", vehicle: "Vehicle"
+    } };
+  }, "ru");
+  const choices = Object.fromEntries(systemTypes.map((id) => [id, localize(typeLabels[id])]));
+  assert.deepEqual(choices, {
+    character: "Персонаж игрока", npc: "Персонаж ведущего", haunt: "Видение",
+    trap: "Ловушка", vehicle: "Транспортное средство"
+  });
+  assert.equal(typeLabels.character, "TYPES.Actor.character");
+  assert.equal(typeLabels.base, "TYPES.Base");
+  assert.equal(env.game.i18n.translations.TYPES.Base, "Base");
+  assert.equal(env.game.modules.get(MODULE_ID).api.localizationStatus().error, null);
+});
+
 test("approved skill points override the base while deferred R-01 R-02 R-03 stay untouched", async () => {
   const env = environment();
   const unresolved = ["AbilityScoreLinks", "AutomaticSpellSlots", "UseSpellPoints", "SpellPoints", "SpellPointsMax", "SpellPointsCost"];

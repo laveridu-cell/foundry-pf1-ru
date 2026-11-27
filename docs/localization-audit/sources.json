@@ -25,8 +25,8 @@
     "rights": "No LICENSE/COPYING file or license field found at the pinned commit; full values withheld from public inventory"
   },
   "module": {
-    "version": "0.1.0",
-    "base_commit": "8a81384efa4b5318e5997bffac222c934eab2905",
+    "version": "0.1.1",
+    "base_commit": "bf0b80b6fdfc3bac9347c7bf515ce43298c41ac7",
     "repository": "https://github.com/laveridu-cell/foundry-pf1-ru",
     "paths": [
       "lang/system/pf1.json",
