@@ -56,15 +56,19 @@
     "PF1.SavingThrow": "Испытание",
     "PF1.SavingThrowPlural": "Испытания",
     "PF1.Domain": "Сфера",
-    "PF1.Save": "Сохранить (команда интерфейса)"
+    "PF1.Save": "Сохранить (команда интерфейса)",
+    "PF1.SkillRankPlural": "Пункты навыков",
+    "PF1.BGSkillRanks": "Пункты фоновых навыков"
   },
   "reviews": [
     {"id": "R-01", "keys": ["PF1.AbilityScoreLinks"]},
     {"id": "R-02", "keys": ["PF1.AutomaticSpellSlots"]},
     {"id": "R-03", "keys": ["PF1.UseSpellPoints", "PF1.SpellPoints", "PF1.SpellPointsMax", "PF1.SpellPointsCost"]},
-    {"id": "R-04", "keys": ["PF1.BGSkillRanks", "PF1.SkillRankPlural"]},
     {"id": "R-05", "keys": ["PF1.ConcentrationNotes"]},
     {"id": "R-06", "keys": ["PF1.Tours.ActorSheet.AbilityScoresSection.Content", "PF1.Tours.ActorSheet.TooltipsWithDefinitions.Content", "PF1.Tours.ActorSheet.ItemsDetails.Title"]},
     {"id": "R-07", "keys": ["PF1.HelpSellMultiplier"]}
+  ],
+  "resolved_reviews": [
+    {"id": "R-04", "keys": ["PF1.BGSkillRanks", "PF1.SkillRankPlural"], "status": "approved", "resolution": "Решение пользователя в задании 4; пункты навыков и пункты фоновых навыков. Применено в партии 1."}
   ]
 }

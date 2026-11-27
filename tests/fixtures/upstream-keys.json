@@ -1,7 +1,7 @@
 {
   "pf1": {
     "version": "11.11",
-    "source": "https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/blob/v11.11/lang/en.json",
+    "source": "https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/blob/418761d2e16a6037c0156bb4a241f7cea5a2986d/lang/en.json",
     "keys": {
       "PF1.AbilityStr": "Strength",
       "PF1.AbilityDex": "Dexterity",
@@ -11,7 +11,19 @@
       "PF1.AbilityCha": "Charisma",
       "PF1.SavingThrowRoll": "{save} Saving Throw",
       "PF1.ArmorClass": "Armor Class",
-      "PF1.Save": "Save"
+      "PF1.Save": "Save",
+      "PF1.SkillRankPlural": "Skill Ranks",
+      "PF1.BGSkillRanks": "BG Skill Ranks",
+      "PF1.Sheet.PC": "Player Character (PC)",
+      "PF1.Sheet.NPC": "Nonplayer Character (NPC)",
+      "PF1.Sheet.NPCLite": "NPC Lite",
+      "PF1.Sheet.NPCLoot": "Loot",
+      "PF1.Sheet.Haunt": "Haunt",
+      "PF1.Sheet.Trap": "Trap",
+      "PF1.Sheet.Vehicle": "Vehicle",
+      "PF1.Sheet.Item": "Generic Item",
+      "PF1.Sheet.Container": "Container",
+      "PF1.Sheet.TextPage": "Text Page (PF1)"
     }
   },
   "babele": {
