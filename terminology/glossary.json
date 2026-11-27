@@ -12,6 +12,22 @@
     { "en": "Saving Throw", "ru": "Испытание", "context": "игровое испытание", "source": "AGENTS.md", "approvedBy": "user", "note": "Утверждено пользователем; PF1.SavingThrow остаётся в базовой локализации." },
     { "en": "Domain", "ru": "Сфера", "context": "классовая особенность жреца", "source": "AGENTS.md", "approvedBy": "user" },
     { "en": "Domains", "ru": "Сферы", "context": "классовая особенность жреца, множественное число", "source": "AGENTS.md", "approvedBy": "user" },
-    { "en": "Save", "ru": "Сохранить", "key": "PF1.Save", "context": "команда сохранения изменений в интерфейсе", "source": "AGENTS.md", "approvedBy": "user" }
+    { "en": "Save", "ru": "Сохранить", "key": "PF1.Save", "context": "команда сохранения изменений в интерфейсе", "source": "AGENTS.md", "approvedBy": "user" },
+    { "en": "Skill Ranks", "ru": "Пункты навыков", "key": "PF1.SkillRankPlural", "context": "пункты навыков, R-04", "source": "AGENTS.md", "approvedBy": "user", "status": "approved", "note": "Утверждено пользователем в задании 4; не использовать «ранги»." },
+    { "en": "BG Skill Ranks", "ru": "Пункты фоновых навыков", "key": "PF1.BGSkillRanks", "context": "пункты фоновых навыков, R-04", "source": "AGENTS.md", "approvedBy": "user", "status": "approved", "note": "BG означает Background, а не отдельную характеристику." },
+    { "en": "Background Skill", "ru": "Фоновый навык", "context": "единственное число, R-04", "source": "AGENTS.md", "approvedBy": "user", "status": "approved" },
+    { "en": "Background Skills", "ru": "Фоновые навыки", "context": "множественное число, R-04", "source": "AGENTS.md", "approvedBy": "user", "status": "approved" }
+  ],
+  "contextReview": [
+    {
+      "id": "R-02",
+      "en": "Ability Score Bonus Slots",
+      "candidateKey": "PF1.AutomaticSpellSlots",
+      "sourcePhraseRu": "Дополнительные заклинания в день",
+      "source": "user-core-rulebook",
+      "reference": "https://drive.google.com/file/d/12bDq5ppWERwsM2xOppvLzT7VosCJET3T/view — «Сборник материалов по ролевой игре „Pathfinder“», PDF 17 / печатная 16, заголовок таблицы",
+      "status": "source-confirmed-context-pending",
+      "note": "Формулировка книги подтверждена; перевод ключа не утверждён. Нужно проверить действие autoSpellLevels в PF1 11.11. Не применять «Дополнительные ячейки за характеристику» без отдельного обоснования."
+    }
   ]
 }

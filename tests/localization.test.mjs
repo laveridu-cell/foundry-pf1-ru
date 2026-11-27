@@ -67,6 +67,36 @@ test("Save means saving form changes while SavingThrow keeps the base terminolog
   assert.equal(env.game.i18n.translations.PF1.SavingThrowFort, "Стойкость");
 });
 
+test("sheet batch overlays ten English labels and keeps third-party sheet entries", async () => {
+  const fixtures = JSON.parse(await readFile(new URL("tests/fixtures/upstream-keys.json", root)));
+  const sheets = Object.entries(fixtures.pf1.keys).filter(([key]) => key.startsWith("PF1.Sheet."));
+  assert.equal(sheets.length, 10);
+  const env = environment();
+  env.game.i18n.translations.PF1.Sheet = Object.fromEntries(sheets.map(([key, value]) => [key.slice(10), value]));
+  const original = env.game.i18n.translations.PF1.Sheet;
+  original.ThirdPartySheet = "Чужой лист";
+  await applyTranslations(env);
+  assert.equal(env.game.i18n.translations.PF1.Sheet, original);
+  for (const [key, english] of sheets) {
+    const russian = original[key.slice(10)];
+    assert.notEqual(russian, english, key);
+    assert.match(russian, /[А-Яа-яЁё]/u, key);
+  }
+  assert.equal(original.ThirdPartySheet, "Чужой лист");
+});
+
+test("approved skill points override the base while deferred R-01 R-02 R-03 stay untouched", async () => {
+  const env = environment();
+  const unresolved = ["AbilityScoreLinks", "AutomaticSpellSlots", "UseSpellPoints", "SpellPoints", "SpellPointsMax", "SpellPointsCost"];
+  for (const key of unresolved) env.game.i18n.translations.PF1[key] = `base:${key}`;
+  env.game.i18n.translations.PF1.SkillRankPlural = "Пункты навыка";
+  env.game.i18n.translations.PF1.BGSkillRanks = "Ранги фоновых навыков";
+  await applyTranslations(env);
+  assert.equal(env.game.i18n.translations.PF1.SkillRankPlural, "Пункты навыков");
+  assert.equal(env.game.i18n.translations.PF1.BGSkillRanks, "Пункты фоновых навыков");
+  for (const key of unresolved) assert.equal(env.game.i18n.translations.PF1[key], `base:${key}`);
+});
+
 test("Foundry package paths never repeat the module directory", async () => {
   for (const leadingSlash of ["", "/"]) {
     const env = environment();
