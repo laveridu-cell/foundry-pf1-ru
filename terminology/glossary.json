@@ -16,7 +16,11 @@
     { "en": "Skill Ranks", "ru": "Пункты навыков", "key": "PF1.SkillRankPlural", "context": "пункты навыков, R-04", "source": "AGENTS.md", "approvedBy": "user", "status": "approved", "note": "Утверждено пользователем в задании 4; не использовать «ранги»." },
     { "en": "BG Skill Ranks", "ru": "Пункты фоновых навыков", "key": "PF1.BGSkillRanks", "context": "пункты фоновых навыков, R-04", "source": "AGENTS.md", "approvedBy": "user", "status": "approved", "note": "BG означает Background, а не отдельную характеристику." },
     { "en": "Background Skill", "ru": "Фоновый навык", "context": "единственное число, R-04", "source": "AGENTS.md", "approvedBy": "user", "status": "approved" },
-    { "en": "Background Skills", "ru": "Фоновые навыки", "context": "множественное число, R-04", "source": "AGENTS.md", "approvedBy": "user", "status": "approved" }
+    { "en": "Background Skills", "ru": "Фоновые навыки", "context": "множественное число, R-04", "source": "AGENTS.md", "approvedBy": "user", "status": "approved" },
+    {"en": "Race", "ru": "Народ", "key": "TYPES.Item.race", "context": "тип предмета PF1 11.11", "source": "AGENTS.md", "approvedBy": "user", "status": "approved", "note": "R-08: пользователь сохранил предложенный вариант после сравнения Family и книги."},
+    {"en": "Buff", "ru": "Эффект", "key": "TYPES.Item.buff", "context": "тип предмета PF1 11.11", "source": "AGENTS.md", "approvedBy": "user", "status": "approved", "note": "R-09: временное воздействие, не обязательно усиление."},
+    {"en": "Consumable", "ru": "Расходуемый предмет", "key": "TYPES.Item.consumable", "context": "тип предмета PF1 11.11", "source": "AGENTS.md", "approvedBy": "user", "status": "approved", "note": "R-10: утверждён пользователем; заголовок таблицы книги «Расходные материалы» соответствует Limited Use, не Consumable. Не использовать его как прямое подтверждение названия типа и не унифицировать реагенты автоматически."},
+    {"en": "Implant", "ru": "Имплантат", "key": "TYPES.Item.implant", "context": "тип предмета PF1 11.11", "source": "AGENTS.md", "approvedBy": "user", "status": "approved", "note": "R-11: включает кибернетику, магические татуировки, пересадки и пирсинг."}
   ],
   "contextReview": [
     {

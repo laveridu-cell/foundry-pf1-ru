@@ -5,8 +5,6 @@ import { applyTranslations, installLocalization, MODULE_ID, registerCompendiums 
 
 const manifest = JSON.parse(await readFile(new URL("../module.json", import.meta.url)));
 const root = new URL("../", import.meta.url);
-// Terminology questions R-08–R-11: retain Phenomen's values until the user's decision.
-const pendingItemTypes = new Set(["race", "buff", "consumable", "implant"]);
 
 function environment({ lang = "ru", system = "pf1", babeleActive = true } = {}) {
   const game = {
@@ -128,18 +126,16 @@ test("item and action overlays replace English labels without replacing unrelate
   Object.assign(env.game.i18n.translations.PF1, {
     ActionTypes: { ...actions, thirdParty: "Другое действие" },
     Subtypes: { Item: { feat: { feat: "Черта из базового перевода" } } },
-    SavingThrow: "Испытание"
+    SavingThrow: "Испытание",
+    LimitedUses: { Periods: { single: "Однократно из базового перевода" } }
   });
   const dictionary = env.game.i18n.translations;
   const subtypes = structuredClone(dictionary.PF1.Subtypes);
+  const limitedUses = structuredClone(dictionary.PF1.LimitedUses);
   const sheets = originals("PF1.Sheet.");
   await applyTranslations(env);
   for (const [entries, target] of [[items, dictionary.TYPES.Item], [actions, dictionary.PF1.ActionTypes]]) {
     for (const [key, english] of Object.entries(entries)) {
-      if (entries === items && pendingItemTypes.has(key)) {
-        assert.equal(target[key], english, `unapproved item type ${key} must retain the base value`);
-        continue;
-      }
       assert.notEqual(target[key], english, key);
       assert.match(target[key], /[А-Яа-яЁё]/u, key);
     }
@@ -148,6 +144,10 @@ test("item and action overlays replace English labels without replacing unrelate
   assert.equal(dictionary.TYPES.Item.thirdParty, "Другой модуль");
   assert.equal(dictionary.PF1.ActionTypes.thirdParty, "Другое действие");
   assert.deepEqual(dictionary.PF1.Subtypes, subtypes);
+  assert.deepEqual(dictionary.PF1.LimitedUses, limitedUses, "Consumable does not rename limited-use settings");
+  assert.deepEqual(Object.fromEntries(["race", "buff", "consumable", "implant"].map((id) => [id, dictionary.TYPES.Item[id]])), {
+    race: "Народ", buff: "Эффект", consumable: "Расходуемый предмет", implant: "Имплантат"
+  });
   assert.equal(dictionary.TYPES.Item.feat, "Особенность", "Feature is broader than the feat subtype");
   assert.equal(dictionary.TYPES.Item.container, dictionary.PF1.Sheet.Container);
   assert.equal(Object.keys(sheets).length, 10);
@@ -186,10 +186,7 @@ test("awaited loading supplies item choices and PF1's action cache while option 
   const actionCache = Object.fromEntries(Object.entries(actionLabels).map(([id, key]) => [id, localize(key)]));
   assert.deepEqual(Object.keys(itemChoices), Object.keys(typeLabels));
   assert.deepEqual(Object.keys(actionCache), Object.keys(actionLabels));
-  for (const [id, label] of Object.entries(itemChoices)) {
-    if (pendingItemTypes.has(id)) assert.equal(label, fixtures.pf1.keys[typeLabels[id]]);
-    else assert.match(label, /[А-Яа-яЁё]/u);
-  }
+  for (const label of Object.values(itemChoices)) assert.match(label, /[А-Яа-яЁё]/u);
   for (const label of Object.values(actionCache)) assert.match(label, /[А-Яа-яЁё]/u);
   assert.equal(actionCache.spellsave, "Испытание (заклинание)");
   assert.equal(actionCache.spellSave, undefined, "a localization key must not become an action ID");
