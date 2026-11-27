@@ -1,0 +1,70 @@
+{
+  "groups": {
+    "sheets": "Основные элементы листов персонажей",
+    "abilities": "Характеристики, навыки и испытания",
+    "combat": "Боевая система и действия",
+    "items": "Предметы, снаряжение и инвентарь",
+    "magic": "Заклинания и магия",
+    "features": "Классы, способности и особенности",
+    "effects": "Состояния и эффекты",
+    "settings": "Настройки системы",
+    "dialogs": "Системные уведомления и диалоги",
+    "other": "Остальные разделы",
+    "unclassified": "Не классифицировано уверенно"
+  },
+  "group_rules": [
+    {"id": "resolved-combat-context", "pattern": "^PF1\\.(KeyAbility$|KeyAbilityRef$|MaxAbilityHint$)", "group": "combat", "basis": "module/applications/component/action-sheet.mjs; public/templates/apps/item-action/action.hbs"},
+    {"id": "resolved-settings-context", "pattern": "^PF1\\.(BaseSetup$|UtilityFunctions$)", "group": "settings", "basis": "public/templates/actors/parts/actor-settings.hbs"},
+    {"id": "resolved-class-context", "pattern": "^PF1\\.LevelOffset$", "group": "features", "basis": "public/templates/items/class.hbs"},
+    {"id": "resolved-item-context", "pattern": "^PF1\\.(AddNote$|Resizing$)", "group": "items", "basis": "public/templates/items/parts/item-notes.hbs; public/templates/items/parts/item-size.hbs"},
+    {"id": "shared-entry-control", "pattern": "^PF1\\.AddEntry$", "group": "other", "basis": "public/templates/apps/damage-resistance-selector.hbs; общий элемент добавления строк"},
+    {"id": "additional-source-sections", "pattern": "^(TYPES\\.Item\\.attack$|PF1\\.(Subtypes\\.Item\\.attack\\.|AddBaseInstance$|AddNonMultInstance$|AddOnCritInstance$|CreateAttack$|HalfBAB$|HealBonus|Iterative$|NonMultBonusFormula$|OnCritBonusFormula$|SecondaryAttack))", "group": "combat", "basis": "public/templates/apps/item-action/action.hbs; module/config.mjs"},
+    {"id": "additional-effects", "pattern": "^(TYPES\\.Item\\.buff$|PF1\\.(Subtypes\\.Item\\.buff\\.|WoundLevel\\.|WoundThreshold$))", "group": "effects", "basis": "public/templates/items/buff.hbs; module/config.mjs"},
+    {"id": "additional-magic", "pattern": "^(TYPES\\.Item\\.spell$|PF1\\.(ArcaneSpellFailure|LeftToPrepare$|RollCLMacroName$|RollConcentrationMacroName$))", "group": "magic", "basis": "public/templates/actors/parts/actor-spellbook.hbs; module/config.mjs"},
+    {"id": "additional-sheets", "pattern": "^PF1\\.(Alignment$|CustomHitDice|DieSize$|Quadruped$)", "group": "sheets", "basis": "public/templates/actors/parts/actor-attributes.hbs; module/applications/actor"},
+    {"id": "additional-inventory", "pattern": "^PF1\\.(BrowseItems$|CreateItemNamePlaceholder$|UseItem$)", "group": "items", "basis": "module/compendium-directory.mjs; public/templates/items"},
+    {"id": "additional-common", "pattern": "^PF1\\.(BrowseBestiary$|DisplayDefensesMacroName$)", "group": "other", "basis": "module/compendium-directory.mjs; module/documents/macros.mjs"},
+    {"id": "settings-namespaces", "pattern": "^PF1\\.(SETTINGS\\.|Application\\.Settings\\.|KEYBINDINGS\\.|CustomVisionRules\\.)", "group": "settings", "basis": "module/documents/settings.mjs; module/applications/settings; pf1.mjs"},
+    {"id": "effect-namespaces", "pattern": "^(EFFECT\\.|PF1\\.(Condition\\.|ChangeFlags\\.|ModifierType\\.|ChangePriority\\.|ActiveFeedback\\.|Application\\.(ChangeEditor|ChangeTargetSelector|ContextNoteTargetSelector|DamageResistanceSelector)\\.))", "group": "effects", "basis": "module/registry/conditions.mjs; public/templates/apps/change-editor.hbs"},
+    {"id": "combat-namespaces", "pattern": "^PF1\\.(ActionTypes\\.|Activation\\.|DamageTypes\\.|DamageTypeCategory\\.|ExtraAttacks\\.|Rolls\\.|Application\\.(Damage|ActionSelector)\\.)", "group": "combat", "basis": "module/action-use; public/templates/apps/item-action; module/config.mjs"},
+    {"id": "magic-namespaces", "pattern": "^PF1\\.(SpellComponents\\.|SpellDescriptors\\.|Spellcasting\\.|AutoSpellClassLevelOffset\\.|Spellbook\\.|SpellSchools\\.|SpellSubschools\\.|SpellLevels\\.|Aura\\.)", "group": "magic", "basis": "public/templates/actors/parts/actor-spellbook.hbs; public/templates/items/spell.hbs; module/config.mjs"},
+    {"id": "item-namespaces", "pattern": "^(TYPES\\.Item\\.(weapon|equipment|consumable|loot|implant|container)$|PF1\\.(WeaponGroup\\.|Currency\\.|Containers\\.|WeightReduction\\.|AmmoType\\.|WeaponProperty\\.|EquipSlots\\.|Cybertech\\.|Materials\\.|Subtypes\\.Item\\.(loot|consumable|equipment|weapon|container|implant)\\.|Application\\.CurrencyTransfer\\.))", "group": "items", "basis": "public/templates/items; module/config.mjs; public/templates/actors/parts/actor-inventory.hbs"},
+    {"id": "feature-namespaces", "pattern": "^(TYPES\\.Item\\.(class|feat|race)$|PF1\\.(Trait\\.|RacialTraitCategories\\.|RaceTypes\\.|FavouredClass\\.|FavouredClassBonus\\.|AbilityTypes\\.|Subtypes\\.Item\\.(class|feat|race)\\.))", "group": "features", "basis": "public/templates/items/class.hbs; module/config.mjs"},
+    {"id": "sheet-namespaces", "pattern": "^(TYPES\\.Actor\\.|TOKEN\\.|PF1\\.(Sheet\\.|LevelUp\\.|Sense\\.|Movement\\.|ActorSize\\.|AgeCategory\\.|AgeCategories\\.|CustomVisionRules\\.|Haunt\\.|Trap\\.|Vehicles\\.|Application\\.(PartyRest|XPDistributor|PointBuy|VisionSharing)\\.))", "group": "sheets", "basis": "public/templates/actors; public/templates/apps/level-up.hbs; module/applications/actor"},
+    {"id": "message-namespaces", "pattern": "^PF1\\.(Error\\.|Warning\\.|Info\\.|Migration\\.|Troubleshooter\\.|Dialog\\.|Application\\.)", "group": "dialogs", "basis": "module/applications; public/templates/apps; module/migration.mjs"},
+    {"id": "reference-namespaces", "pattern": "^PF1\\.(Language\\.|CreatureTypes\\.|CreatureSubTypes\\.|Alignments\\.|DamageAlignment\\.|Distance\\.|Time\\.|Proficiency\\.|Template\\.|CompendiumBrowser\\.|ScriptCalls\\.|StackDetails\\.|BaseTypes\\.|ContentSource\\.|Tours\\.|Help\\.|EnrichedText\\.|Chat\\.|Calendar\\.|PACKS\\.|LimitedUses\\.)", "group": "other", "basis": "module/config.mjs; public/tours; module/compendium-directory.mjs"},
+    {"id": "ability-labels", "pattern": "^PF1\\.(Ability|Skill|SavingThrow|SaveNotes|RollSkill|RollSave|RollAbility|CheckOnly|ModifierOnly|AddSkill|EditSkill|DeleteSkill|SourceInfoSkillRank|BGSkill|BGUsed|Rank$|Untrained$|ClassSkills$)", "group": "abilities", "basis": "public/templates/actors/parts/actor-skills-front.hbs; actor-settings-ability-scores.hbs; module/config.mjs"},
+    {"id": "magic-labels", "pattern": "^PF1\\.(Spell|Caster|Casting|Concentration|Concentation|Domain|SubDomain|School$|Subschool$|ElementalSchool$|Bloodline$|Arcanist$|RedMantisAssassin$|Psychic$|CLNotes$|CLSchoolNotes$|DCSchoolNotes$|BrowseSpells$|CreateSpellbook$|CreateItemForSpell$|AutomaticSpellSlots$|RequiresAutoSlots$|AutoCalculateSpellSlots$|AutoSlotIncompatible$|HasCantrips$|NoCastingAbilityLimit$|InvalidSpellLevelHint$|Prepared$|Unprepared$|InitiallyPrepared$|Preparation$|PreparePerDay$|CastPerDay$|Casts|UseSpell|Harmless$|Dismissable|Components$|LearnedAt$)", "group": "magic", "basis": "public/templates/actors/parts/actor-spellbook.hbs; public/templates/items/spell.hbs"},
+    {"id": "combat-labels", "pattern": "^PF1\\.(Action|Attack|Damage|Critical|Melee|Ranged|Thrown|AllRanged|AllMelee|NaturalAttack|Defense|Defenses|DamImm|DamRed|DamVuln|ConImm|ConRes|EnRes|Immune|Immunity|Vulnerable|Initiative|Tiebreaker|Combat|ArmorClass$|NaturalArmor$|ACNormal$|ACTouch$|ACFlatFooted$|ACFFAbbr$|ACNotes$|BAB|CMB|CMD|PowerAttack$|DeadlyAim$|Flanking$|HighGround$|Charge$|PrimaryAttack$|SecondaryAttack$|TouchAttack|ProficientAttack$|SingleAttack$|FullAttack$|PerformAttack$|Haste$|Manyshot$|RapidShot$|PointBlankShot$|Reach$|RollCMB|RollInitiative|RollMelee|RollRanged|RollBAB|SituationalBonus$)", "group": "combat", "basis": "public/templates/actors/parts/actor-combat.hbs; public/templates/apps/item-action; module/action-use"},
+    {"id": "inventory-labels", "pattern": "^PF1\\.(Item|Inventory|Weapon|Equipment|Consumable|Ammunition|Ammo|Implanted$|Quantity|Price|Weight|StartingWealth$|SplitValue$|TotalItemValue$|Hands$|Equipped$|Carried$|Identified|Unidentified|Identify|Unidentify|Enhancement|Masterwork$|ArmorCheckPenalty$|ACP|MaxDex|ArmorOrShield$|Encumbrance$|MediumEncumbrance$|HeavyEncumbrance$|BonusCarry|Carry|SellValue$|TotalItems$|FilteredItems$|GiveItem|SplitItem$|ConvertCurrency$|Cursed$|Timeworn$|Artifact$|Broken$|AutoBroken$|Recover|ForceRecover$|Held|DefaultAmmo$|InvalidAmmoType$|Misfire$|Capacity$|CreateItem(Wand|Scroll|Potion)|HelpSell|Hardness$|MagicItems$|Lbs$|Kgs$)", "group": "items", "basis": "public/templates/actors/parts/actor-inventory.hbs; public/templates/items; module/config.mjs"},
+    {"id": "feature-labels", "pattern": "^PF1\\.(Class|Classes$|Feature|Features$|Feat|Race|Races$|Trait|AssociatedClass$|NewClassFeature|Browse(Feats|Classes|Races)$|BonusFeat|UseFeat$|ByLevel$|ByBonus$|FromLevels$|FromMythic$|Tier$|LearnedAt$)", "group": "features", "basis": "public/templates/actors/parts/actor-features.hbs; public/templates/items/class.hbs; module/config.mjs"},
+    {"id": "effect-labels", "pattern": "^PF1\\.(Buff|Change|Changes$|Condition|ConditionPlural$|AddEffect$|AddConditional$|EffectNotes|EffectNotesHint|ContextNotes$|BrowseBuffs$|UseBuff$|Drain$|Penalty$|NegativeLevels$|Modifications$|Temporary$|Permanent$|Effects$|Effect$|Modifications$|ToggleSkillLock$|CustomBonus|BonusFormula$)", "group": "effects", "basis": "public/templates/actors/parts/actor-buffs.hbs; public/templates/items/buff.hbs; module/applications/change-editor.mjs"},
+    {"id": "sheet-labels", "pattern": "^PF1\\.(Attributes$|Biography$|CharacterName$|Level$|Gender$|Deity$|Age$|Height$|Size$|Stature|Health|Healing$|Wounds$|Vigor$|HitPoints$|HitDi|TempHP$|Nonlethal$|Regeneration$|FastHealing$|Languages$|Senses$|Rest|Restore|LongTermCare$|FullRestMessage$|Quickbar|QuickCombat|HideFromToken$|Experience$|XPValue$|ChallengeRatingShort$|CROffset$|PCs$|NPCs$|ReducedMovementSpeed$|StaticSize|Driving$)", "group": "sheets", "basis": "public/templates/actors/character-sheet.hbs; actor-attributes.hbs; public/templates/apps/actor-rest.hbs"},
+    {"id": "flat-messages", "pattern": "^PF1\\.(Notification|Info_|Delete(Item|Action|Skill)(Title|Confirmation)$|Invalid|LoadingItemsFromIndexes$|NoDescription$|NoInstrutions$|NotSelected$|ChargesDepleted$)", "group": "dialogs", "basis": "module/applications; module/documents; public/templates/apps"},
+    {"id": "shared-controls", "pattern": "^PF1\\.(Title|General|Apply|Roll$|TakeX$|Flags|CreateItem$|EditItem$|EditAction$|Delete$|Duplicate|DeleteItem$|DeleteAction$|DeleteChildLinks$|Link|Any$|Filter|Compendium|Copy|Footnotes|Source|NonApplicable$|CS$|CSTooltip$|RT$|RTTooltip$|Trigger$|Abundant|All$|Description$|Instructions$|Descriptor|Details$|Edit$|InfoShort$|None$|Notes$|Operator$|Save$|Base$|TempShort$|Precision$|Splash$|Type$|Subtype$|ChargePlural$|Add$|Active$|TypePlural$|Area$|Misc|Check$|Range|MinRange|MaxRange|Radius$|Target|Unknown$|Usage$|Slot$|Source$|Unlimited$|Infinite$|Requirements$|Formula$|Name$|BaseFormula$|ActivationCost$|Duration|ForDuration$|EnabledCheckFlags$|CheckFlags$|HPShort$|RollMode$|UpdateActor$|UpdateItem$|Multiplier$|Used$|Transferred$|SeeText$|DC|DifficultyClass$|Success$|Failure$|Enabled$|Disabled$|Low$|Medium$|High$|Poor$|Good$|Proficient$|MeasureTemplate$|TemplateType$|TemplateSize|CreatureType$|InheritAs$|Standard$|Manual$|Override$|NoOverride$|CustomColor$|CustomTexture$|CustomSkill$|FromSources$|Finish$|Yes$|No$|Other$|BaseDCFormula$|Category$|Tag|Identifier$|Reset$|Use$|Confirm$|Offsets$|Priority$|Creatures$|ChargeCost|PerAttack$|ChargeSource$|MaximumUsesFormula$|RechargeFormula|Value$|SearchFilterPlaceholder$|QuickActions$|SoundEffect$|SetTo$|Total$|Missing$|Excess$|Advanced$|DisplayInChat$|MaxFormula$|RestoredOnRest$|Custom$|Default$|DefaultRef$|Normal$|Summary$|Current$|Maximum$|MaxShort$|Minimum$|Average|Modifier$|ModifierAbbr$|Bonus$|OpenAssociatedCompendiumEntry$|Settings$|Command$|MaximumRangeIncrements$|CustomRollDesc$|Hidden$|Bright$|Dim$|Options$|Split$|ChooseAnAction$|Select|Drink$|Properties$)", "group": "other", "basis": "Общие управляющие подписи используются несколькими приложениями; конкретные места записаны в static_usages"}
+  ],
+  "notations": {
+    "PF1.ContentSource.DateFormat": "YYYY-MM-DD",
+    "PF1.Distance.mShort": "m",
+    "PF1.Distance.kmShort": "km",
+    "PF1.Migration.Issues.ID": "ID",
+    "PF1.Migration.Issues.UUID": "UUID",
+    "PF1.ContentSource.Info.ID": "ID"
+  },
+  "identity_review_prefixes": ["PF1.Language.", "PF1.Calendar.", "PF1.PACKS.", "PF1.RedMantisAssassin"],
+  "approved_terms": {
+    "PF1.SavingThrow": "Испытание",
+    "PF1.SavingThrowPlural": "Испытания",
+    "PF1.Domain": "Сфера",
+    "PF1.Save": "Сохранить (команда интерфейса)"
+  },
+  "reviews": [
+    {"id": "R-01", "keys": ["PF1.AbilityScoreLinks"]},
+    {"id": "R-02", "keys": ["PF1.AutomaticSpellSlots"]},
+    {"id": "R-03", "keys": ["PF1.UseSpellPoints", "PF1.SpellPoints", "PF1.SpellPointsMax", "PF1.SpellPointsCost"]},
+    {"id": "R-04", "keys": ["PF1.BGSkillRanks", "PF1.SkillRankPlural"]},
+    {"id": "R-05", "keys": ["PF1.ConcentrationNotes"]},
+    {"id": "R-06", "keys": ["PF1.Tours.ActorSheet.AbilityScoresSection.Content", "PF1.Tours.ActorSheet.TooltipsWithDefinitions.Content", "PF1.Tours.ActorSheet.ItemsDetails.Title"]},
+    {"id": "R-07", "keys": ["PF1.HelpSellMultiplier"]}
+  ]
+}

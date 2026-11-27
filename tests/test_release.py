@@ -122,6 +122,15 @@ class ReleaseTests(unittest.TestCase):
         path.write_text(json.dumps(glossary))
         self.run_tool("validate.py")
 
+    def test_audit_materials_are_not_distributed(self):
+        audit = self.root / "docs/localization-audit/upstream/nested"
+        audit.mkdir(parents=True, exist_ok=True)
+        (audit / "source.json").write_text('{"not-for-distribution": "local audit only"}')
+        self.run_tool("package.py")
+        self.run_tool("check_release.py")
+        with ZipFile(self.root / "dist/foundry-pf1-ru.zip") as bundle:
+            self.assertFalse(any(name.startswith("docs/localization-audit/") for name in bundle.namelist()))
+
 
 if __name__ == "__main__":
     unittest.main()
