@@ -26,7 +26,7 @@
   },
   "module": {
     "version": "0.1.1",
-    "base_commit": "bf0b80b6fdfc3bac9347c7bf515ce43298c41ac7",
+    "base_commit": "38ef0746147e179cf2c13bcaf19d7aed7f26ecb0",
     "repository": "https://github.com/laveridu-cell/foundry-pf1-ru",
     "paths": [
       "lang/system/pf1.json",

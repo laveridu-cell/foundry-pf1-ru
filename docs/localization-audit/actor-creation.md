@@ -41,6 +41,8 @@ PF1 11.11 не назначает свои значения `CONFIG.Actor.typeLa
 
 ## Проверка окна предметов: только аудит
 
+Этот раздел фиксирует объём PR №6. После его слияния перевод типов предметов ведётся в [отдельной партии](item-action-types.md); текущий статус и исключения находятся в ней.
+
 Аналогичный пробел найден для **12** основных типов: `weapon`, `equipment`, `consumable`, `loot`, `class`, `spell`, `feat`, `buff`, `attack`, `race`, `implant`, `container`. В английском словаре это `TYPES.Item.*`; в закреплённом Phenomen все 12 значений остаются английскими, у нашего модуля переводов этого раздела нет.
 
 В отличие от актёра, PF1 имеет своё окно: [ItemBasePF.createDialog](https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/blob/418761d2e16a6037c0156bb4a241f7cea5a2986d/module/documents/item/item-base.mjs#L38) вызывает `pf1.applications.item.CreateDialog`. В [item-create.mjs:178](https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/blob/418761d2e16a6037c0156bb4a241f7cea5a2986d/module/applications/item/item-create.mjs#L178) список строится из `CONFIG.Item.typeLabels`, а [item-create.hbs:13](https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/blob/418761d2e16a6037c0156bb4a241f7cea5a2986d/public/templates/widgets/item-create.hbs#L13) использует `selectOptions` с `localize=true`. Подтипы предметов — отдельные `PF1.Subtypes.Item.*`; они не смешиваются с основными типами и в этой задаче не переводятся.

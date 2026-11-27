@@ -5,6 +5,8 @@ import { applyTranslations, installLocalization, MODULE_ID, registerCompendiums 
 
 const manifest = JSON.parse(await readFile(new URL("../module.json", import.meta.url)));
 const root = new URL("../", import.meta.url);
+// Terminology questions R-08–R-11: retain Phenomen's values until the user's decision.
+const pendingItemTypes = new Set(["race", "buff", "consumable", "implant"]);
 
 function environment({ lang = "ru", system = "pf1", babeleActive = true } = {}) {
   const game = {
@@ -85,7 +87,7 @@ test("sheet batch overlays ten English labels and keeps third-party sheet entrie
   assert.equal(original.ThirdPartySheet, "Чужой лист");
 });
 
-test("actor creation types use TYPES.Actor independently of sheet labels and preserve IDs and items", async () => {
+test("actor creation types use TYPES.Actor independently of sheet labels and preserve IDs and third-party items", async () => {
   const env = environment();
   const fixtures = JSON.parse(await readFile(new URL("tests/fixtures/upstream-keys.json", root)));
   const labels = Object.fromEntries(Object.entries(fixtures.pf1.keys)
@@ -93,7 +95,7 @@ test("actor creation types use TYPES.Actor independently of sheet labels and pre
     .map(([key, value]) => [key.slice("TYPES.Actor.".length), value]));
   env.game.i18n.translations.TYPES = {
     Actor: { ...labels, basic: "Basic (for modules)", thirdParty: "Third-party actor" },
-    Item: { weapon: "Weapon", container: "Container" }
+    Item: { thirdParty: "Third-party item" }
   };
   const dictionary = env.game.i18n.translations.TYPES;
   const beforeIDs = Object.keys(dictionary.Actor);
@@ -101,7 +103,7 @@ test("actor creation types use TYPES.Actor independently of sheet labels and pre
   await applyTranslations(env);
   assert.equal(env.game.i18n.translations.TYPES, dictionary);
   assert.deepEqual(Object.keys(dictionary.Actor), beforeIDs);
-  assert.deepEqual(dictionary.Item, beforeItems);
+  for (const [key, value] of Object.entries(beforeItems)) assert.equal(dictionary.Item[key], value);
   assert.equal(dictionary.Actor.basic, "Basic (for modules)");
   assert.equal(dictionary.Actor.thirdParty, "Third-party actor");
   assert.deepEqual(Object.fromEntries(Object.keys(labels).map((id) => [id, dictionary.Actor[id]])), {
@@ -111,6 +113,90 @@ test("actor creation types use TYPES.Actor independently of sheet labels and pre
   for (const [id, sheet] of Object.entries({ character: "PC", npc: "NPC", haunt: "Haunt", trap: "Trap", vehicle: "Vehicle" })) {
     assert.equal(dictionary.Actor[id], env.game.i18n.translations.PF1.Sheet[sheet]);
   }
+});
+
+test("item and action overlays replace English labels without replacing unrelated Phenomen namespaces", async () => {
+  const env = environment();
+  const fixtures = JSON.parse(await readFile(new URL("tests/fixtures/upstream-keys.json", root)));
+  const originals = (prefix) => Object.fromEntries(Object.entries(fixtures.pf1.keys)
+    .filter(([key]) => key.startsWith(prefix)).map(([key, value]) => [key.slice(prefix.length), value]));
+  const items = originals("TYPES.Item.");
+  const actions = originals("PF1.ActionTypes.");
+  assert.equal(Object.keys(items).length, 12);
+  assert.equal(Object.keys(actions).length, 11);
+  env.game.i18n.translations.TYPES = { Item: { ...items, thirdParty: "Другой модуль" } };
+  Object.assign(env.game.i18n.translations.PF1, {
+    ActionTypes: { ...actions, thirdParty: "Другое действие" },
+    Subtypes: { Item: { feat: { feat: "Черта из базового перевода" } } },
+    SavingThrow: "Испытание"
+  });
+  const dictionary = env.game.i18n.translations;
+  const subtypes = structuredClone(dictionary.PF1.Subtypes);
+  const sheets = originals("PF1.Sheet.");
+  await applyTranslations(env);
+  for (const [entries, target] of [[items, dictionary.TYPES.Item], [actions, dictionary.PF1.ActionTypes]]) {
+    for (const [key, english] of Object.entries(entries)) {
+      if (entries === items && pendingItemTypes.has(key)) {
+        assert.equal(target[key], english, `unapproved item type ${key} must retain the base value`);
+        continue;
+      }
+      assert.notEqual(target[key], english, key);
+      assert.match(target[key], /[А-Яа-яЁё]/u, key);
+    }
+    assert.deepEqual(Object.keys(target).sort(), [...Object.keys(entries), "thirdParty"].sort());
+  }
+  assert.equal(dictionary.TYPES.Item.thirdParty, "Другой модуль");
+  assert.equal(dictionary.PF1.ActionTypes.thirdParty, "Другое действие");
+  assert.deepEqual(dictionary.PF1.Subtypes, subtypes);
+  assert.equal(dictionary.TYPES.Item.feat, "Особенность", "Feature is broader than the feat subtype");
+  assert.equal(dictionary.TYPES.Item.container, dictionary.PF1.Sheet.Container);
+  assert.equal(Object.keys(sheets).length, 10);
+  assert.equal(dictionary.PF1.ActionTypes.save, "Испытание");
+  assert.equal(dictionary.PF1.ActionTypes.spellSave, "Испытание (заклинание)");
+  assert.equal(dictionary.PF1.Save, "Сохранить");
+  assert.equal(dictionary.PF1.SavingThrow, "Испытание");
+});
+
+test("awaited loading supplies item choices and PF1's action cache while option values remain technical", async () => {
+  const env = environment();
+  const fixtures = JSON.parse(await readFile(new URL("tests/fixtures/upstream-keys.json", root)));
+  const typeLabels = Object.freeze(Object.fromEntries(Object.keys(fixtures.pf1.keys)
+    .filter((key) => key.startsWith("TYPES.Item.")).map((key) => [key.slice(11), key])));
+  // PF1 11.11 module/config.mjs:1112. In particular, value spellsave differs from key spellSave.
+  const actionLabels = Object.freeze({
+    mwak: "PF1.ActionTypes.mwak", rwak: "PF1.ActionTypes.rwak", twak: "PF1.ActionTypes.twak",
+    msak: "PF1.ActionTypes.msak", rsak: "PF1.ActionTypes.rsak", mcman: "PF1.ActionTypes.mcman",
+    rcman: "PF1.ActionTypes.rcman", spellsave: "PF1.ActionTypes.spellSave",
+    save: "PF1.ActionTypes.save", heal: "PF1.ActionTypes.heal", other: "PF1.ActionTypes.other"
+  });
+  const localize = (key) => key.split(".").reduce((value, part) => value?.[part], env.game.i18n.translations) ?? key;
+  let wrappedMethod;
+  installLocalization({ ...env, wrapper: { register: (_id, _target, fn) => { wrappedMethod = fn; } } });
+  await wrappedMethod(async () => {
+    // Native dictionaries, including Phenomen's unchanged English entries, load first.
+    for (const [key, value] of Object.entries(fixtures.pf1.keys)) {
+      const parts = key.split(".");
+      const leaf = parts.pop();
+      const parent = parts.reduce((data, part) => data[part] ??= {}, env.game.i18n.translations);
+      parent[leaf] = value;
+    }
+  }, "ru");
+  // Contract model of consumers AFTER awaited setLanguage; not an execution of Foundry or PF1.
+  const itemChoices = Object.fromEntries(Object.entries(typeLabels).map(([id, key]) => [id, localize(key)]));
+  const actionCache = Object.fromEntries(Object.entries(actionLabels).map(([id, key]) => [id, localize(key)]));
+  assert.deepEqual(Object.keys(itemChoices), Object.keys(typeLabels));
+  assert.deepEqual(Object.keys(actionCache), Object.keys(actionLabels));
+  for (const [id, label] of Object.entries(itemChoices)) {
+    if (pendingItemTypes.has(id)) assert.equal(label, fixtures.pf1.keys[typeLabels[id]]);
+    else assert.match(label, /[А-Яа-яЁё]/u);
+  }
+  for (const label of Object.values(actionCache)) assert.match(label, /[А-Яа-яЁё]/u);
+  assert.equal(actionCache.spellsave, "Испытание (заклинание)");
+  assert.equal(actionCache.spellSave, undefined, "a localization key must not become an action ID");
+  assert.equal(typeLabels.weapon, "TYPES.Item.weapon");
+  assert.equal(actionLabels.save, "PF1.ActionTypes.save");
+  assert.equal(localize("TYPES.Actor.character"), "Персонаж игрока");
+  assert.equal(localize("PF1.Sheet.PC"), "Персонаж игрока");
 });
 
 test("awaited language loading exposes actor type labels before an i18nInit consumer reads them", async () => {
