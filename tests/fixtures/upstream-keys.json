@@ -23,7 +23,12 @@
       "PF1.Sheet.Vehicle": "Vehicle",
       "PF1.Sheet.Item": "Generic Item",
       "PF1.Sheet.Container": "Container",
-      "PF1.Sheet.TextPage": "Text Page (PF1)"
+      "PF1.Sheet.TextPage": "Text Page (PF1)",
+      "TYPES.Actor.character": "Player Character (PC)",
+      "TYPES.Actor.npc": "Nonplayer Character (NPC)",
+      "TYPES.Actor.haunt": "Haunt",
+      "TYPES.Actor.trap": "Trap",
+      "TYPES.Actor.vehicle": "Vehicle"
     }
   },
   "babele": {
