@@ -1,0 +1,36 @@
+{
+  "checked_date": "2026-11-27",
+  "pf1": {
+    "version": "11.11",
+    "tag": "v11.11",
+    "commit": "418761d2e16a6037c0156bb4a241f7cea5a2986d",
+    "repository": "https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1",
+    "file": "lang/en.json",
+    "sha256": "d904610b621f15db56801489c13a10745a0df88878bef714fa561788bfe8f31c",
+    "url": "https://gitlab.com/foundryvtt_pathfinder1e/foundryvtt-pathfinder1/-/blob/418761d2e16a6037c0156bb4a241f7cea5a2986d/lang/en.json"
+  },
+  "phenomen": {
+    "version": "13.351.54",
+    "tag": "release-v13",
+    "commit": "7ca145a3bf952c52c93389856d0c8910dd1b9ef6",
+    "repository": "https://github.com/phenomen/foundry-vtt-ru",
+    "release_id": 298042704,
+    "asset_id": 431122192,
+    "archive_url": "https://github.com/phenomen/foundry-vtt-ru/releases/download/release-v13/ru-ru.zip",
+    "archive_sha256": "010b5bd0db7046ec925c633179aee89f401b311bdcd65ce5f1329caaaa6f28d9",
+    "file": "i18n/systems/pf1.json",
+    "source_file": "public/i18n/systems/pf1.json",
+    "sha256": "203775202b51bf3ffce81506353189c464fbe0f3e56a9fc764371e91566d99e8",
+    "url": "https://github.com/phenomen/foundry-vtt-ru/blob/7ca145a3bf952c52c93389856d0c8910dd1b9ef6/public/i18n/systems/pf1.json",
+    "rights": "No LICENSE/COPYING file or license field found at the pinned commit; full values withheld from public inventory"
+  },
+  "module": {
+    "version": "0.1.0",
+    "base_commit": "041beea7598b4a96fb26e30ba950dd63db6ddad0",
+    "repository": "https://github.com/laveridu-cell/foundry-pf1-ru",
+    "paths": [
+      "lang/system/pf1.json",
+      "lang/overrides/phenomen.json"
+    ]
+  }
+}

@@ -9,7 +9,8 @@ def distribution_files():
     # The glossary and documentation cite this policy; keep those links usable in ZIPs.
     files = [ROOT / "module.json", ROOT / "README.md", ROOT / "AGENTS.md"]
     for directory in ["scripts", "lang", "compendium", "terminology", "docs"]:
-        files.extend(path for path in (ROOT / directory).rglob("*") if path.is_file())
+        files.extend(path for path in (ROOT / directory).rglob("*")
+                     if path.is_file() and not path.is_relative_to(ROOT / "docs/localization-audit"))
     return sorted(files)
 
 
